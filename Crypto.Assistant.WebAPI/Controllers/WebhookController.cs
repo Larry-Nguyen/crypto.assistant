@@ -121,7 +121,13 @@ namespace Crypto.Assistant.WebAPI.Controllers
                     break;
                 case "crypto.assistant.intent.fallback":
                     {
-
+                        var messages = new[]
+                            {
+                                "Xin lỗi! Mình không hiểu.",
+                                "Mình không hiểu!!"
+                            };
+                        var randomIndex = random.Next(0, messages.Length);
+                        responseStringBuilder.AppendLine(messages[randomIndex]);
                     }
                     break;
                 case "crypto.assistant.intent.lottery":

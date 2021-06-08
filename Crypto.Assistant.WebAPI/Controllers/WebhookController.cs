@@ -213,7 +213,7 @@ namespace Crypto.Assistant.WebAPI.Controllers
                     {
                         var cryptocurrency = parameters.Fields["cryptocurrency"]?.StringValue;
                         var coinData = await _coinGeckoClient.CoinsClient.GetAllCoinDataWithId(cryptocurrency, "false", false, true, false, false, false);
-                        var currentPrice = coinData.MarketData.CurrentPrice["usd"];
+                        var currentPrice = coinData.MarketData.CurrentPrice.ContainsKey("usd") ? coinData.MarketData.CurrentPrice["usd"] : null;
                         var coinSymbol = coinData.Symbol.ToUpper(usCulture);
 
                         var realTimePrice = await QueryRealtimeCryptoPrice(coinSymbol);
@@ -263,7 +263,7 @@ namespace Crypto.Assistant.WebAPI.Controllers
                     {
                         var cryptocurrency = parameters.Fields["cryptocurrency"]?.StringValue;
                         var coinData = await _coinGeckoClient.CoinsClient.GetAllCoinDataWithId(cryptocurrency, "false", false, true, false, false, true);
-                        var currentPrice = coinData.MarketData.CurrentPrice["usd"];
+                        var currentPrice = coinData.MarketData.CurrentPrice.ContainsKey("usd") ? coinData.MarketData.CurrentPrice["usd"] : null;
                         var coinSymbol = coinData.Symbol.ToUpper(usCulture);
 
                         var realTimePrice = await QueryRealtimeCryptoPrice(coinSymbol);
@@ -420,7 +420,8 @@ namespace Crypto.Assistant.WebAPI.Controllers
 
             using (var client = new HttpClient())
             {
-                var url = $"https://min-api.cryptocompare.com/data/price?fsym={cryptocurrencySymbol}&tsyms={cryptocurrencySymbolsToConvertInto}";
+                var apiKey = "100f4c6454794b9050b3ccfbd92f2298c152abfd713bd96727c5ae8036c2a8b5";
+                var url = $"https://min-api.cryptocompare.com/data/price?fsym={cryptocurrencySymbol}&tsyms={cryptocurrencySymbolsToConvertInto}&api_key={apiKey}";
                 using var response = await client.GetAsync(url);
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
